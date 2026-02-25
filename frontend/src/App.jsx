@@ -5,6 +5,8 @@ import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 // Import Assets
 import LogoPng from './assets/LOGO-toMedina.png';
 import LogoBgJpeg from './assets/toMedinaLogo.jpg';
+import RiadImg from './assets/Riad.jpg';
+import AppScreenshotImg from './assets/app-screenshot.jpeg';
 
 function App() {
   const containerRef = useRef(null);
@@ -26,11 +28,11 @@ function App() {
     // Prevent scrolling while loading
     document.body.style.overflow = 'hidden';
 
-    // Hold solid background state for 1 second before morphing
+    // Phase 1: Hold solid background state for 1.2 seconds before morphing
     const timer = setTimeout(() => {
       setIsLoaded(true);
       document.body.style.overflow = 'auto';
-    }, 1000);
+    }, 1200);
 
     return () => {
       clearTimeout(timer);
@@ -41,7 +43,7 @@ function App() {
   return (
     <div ref={containerRef} className="min-h-screen font-sans overflow-x-hidden selection:bg-medina-green/20 selection:text-medina-green relative text-slate-800">
 
-      {/* 0. CINEMATIC LOADER & FLOATING NAVBAR */}
+      {/* 0. CINEMATIC LOADER & FLOATING NAVBAR (Phase 2 & 3) */}
       {!isLoaded ? (
         <motion.div
           layoutId="navbar-container"
@@ -49,8 +51,8 @@ function App() {
           transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
         >
           <motion.div layoutId="logo-group" className="flex items-center justify-center">
-            <motion.img layoutId="logo-img" src={LogoPng} alt="toMedina Logo" className="h-32 md:h-40 w-auto object-contain drop-shadow-lg" />
-            {/* toMedina text is hidden initially */}
+            <motion.img layoutId="logo-img" src={LogoPng} alt="toMedina Logo" className="h-40 md:h-56 w-auto object-contain drop-shadow-2xl" />
+            {/* toMedina text is explicitly hidden in this state */}
           </motion.div>
         </motion.div>
       ) : (
@@ -62,6 +64,7 @@ function App() {
           <motion.div layoutId="logo-group" className="flex items-center gap-3">
             <motion.img layoutId="logo-img" src={LogoPng} alt="toMedina Logo" className="h-7 md:h-9 w-auto object-contain drop-shadow-sm" />
 
+            {/* Text appears dynamically after navbar forms */}
             <motion.span
               initial={{ opacity: 0, width: 0, x: -10 }}
               animate={{ opacity: 1, width: "auto", x: 0 }}
@@ -72,7 +75,7 @@ function App() {
             </motion.span>
           </motion.div>
 
-          {/* Center Links (Visible on desktop) */}
+          {/* Center Links (Fade-in after nav morph) */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -96,25 +99,20 @@ function App() {
 
       {/* DELAYED PAGE CONTENT WRAPPER */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
       >
 
-        {/* 1. IMMERSIVE GRAINY MESH BACKGROUND */}
-        <div className="fixed inset-0 z-0 pointer-events-none bg-[#Fdfbf7] overflow-hidden">
-          {/* Glowing Orbs for the Mesh Gradient */}
-          <div className="absolute top-[-15%] left-[-10%] w-[60vw] h-[60vw] bg-[#e6b981] rounded-full mix-blend-multiply blur-[120px] opacity-50"></div>
-          <div className="absolute top-[40%] right-[-10%] w-[50vw] h-[50vw] bg-[#d98a5e] rounded-full mix-blend-multiply blur-[140px] opacity-40"></div>
-          <div className="absolute bottom-[-10%] left-[20%] w-[50vw] h-[50vw] bg-[#D4AF37] rounded-full mix-blend-multiply blur-[150px] opacity-20"></div>
+        {/* 1. SECURE BASE64 SAND & MUTED DESERT BACKGROUND */}
+        <div className="fixed inset-0 z-0 pointer-events-none bg-[#F5F2EB] overflow-hidden">
+          {/* Muted Glowing Orbs for the Desert Gradient */}
+          <div className="absolute top-[-15%] left-[-10%] w-[60vw] h-[60vw] bg-[#E2C792]/30 rounded-full mix-blend-multiply blur-[160px]"></div>
+          <div className="absolute top-[40%] right-[-10%] w-[50vw] h-[50vw] bg-[#D2A78D]/20 rounded-full mix-blend-multiply blur-[160px]"></div>
+          <div className="absolute bottom-[-10%] left-[30%] w-[50vw] h-[50vw] bg-[#DAB692]/20 rounded-full mix-blend-multiply blur-[160px]"></div>
 
-          {/* SVG Noise/Grain Overlay */}
-          <svg className="absolute inset-0 w-full h-full opacity-[0.05] mix-blend-color-burn pointer-events-none" xmlns="http://www.w3.org/2000/svg">
-            <filter id="noiseFilter">
-              <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
-            </filter>
-            <rect width="100%" height="100%" filter="url(#noiseFilter)" />
-          </svg>
+          {/* Base64 Data-URI Sand/Grain Overlay */}
+          <div className="pointer-events-none fixed inset-0 z-40 h-full w-full opacity-[0.25] mix-blend-color-burn" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}></div>
         </div>
 
         {/* 3. HERO SECTION */}
@@ -124,9 +122,10 @@ function App() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={isLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
               transition={{ duration: 1, delay: 1 }}
-              className="w-20 h-20 mx-auto bg-[#D4AF37]/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-[#D4AF37]/30 mb-8 shadow-xl shadow-[#D4AF37]/10"
+              className="relative w-16 h-16 mx-auto bg-gradient-to-tr from-[#D4AF37]/20 to-[#D4AF37]/5 backdrop-blur-md rounded-full flex items-center justify-center border border-[#D4AF37]/40 mb-10 shadow-[0_8px_32px_rgba(212,175,55,0.25)] group cursor-pointer"
             >
-              <Navigation className="w-8 h-8 text-[#D4AF37] translate-x-1 -translate-y-1" />
+              <div className="absolute inset-0 rounded-full border border-[#D4AF37]/40 animate-ping opacity-20 group-hover:opacity-0 transition-opacity duration-500"></div>
+              <Navigation className="w-6 h-6 text-[#D4AF37] -mr-0.5 mt-0.5 drop-shadow-sm transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" style={{ strokeWidth: 2.5 }} />
             </motion.div>
 
             <motion.h1
@@ -148,21 +147,34 @@ function App() {
             </motion.p>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 1, delay: 1.6 }}
-              className="flex flex-col sm:flex-row justify-center gap-4 pt-8"
+              className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-10"
             >
-              <button className="bg-medina-green border border-medina-green text-white px-8 py-4 rounded-2xl flex items-center justify-center gap-3 hover:bg-[#093524] transition-all hover:-translate-y-1 shadow-2xl shadow-medina-green/30">
-                <div className="text-left">
-                  <div className="text-[10px] uppercase tracking-wider text-white/70 font-medium">Download on the</div>
-                  <div className="text-xl font-semibold leading-none mt-0.5">App Store</div>
+              {/* Pro App Store Button */}
+              <button className="relative flex items-center justify-center gap-4 bg-[#111111] text-white px-8 py-3.5 rounded-[1.25rem] hover:bg-black hover:shadow-[0_15px_40px_rgba(0,0,0,0.3)] hover:-translate-y-1 transition-all duration-300 border border-white/10 w-full sm:w-auto group overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <svg viewBox="0 0 384 512" className="w-[26px] h-[26px] fill-current text-white"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" /></svg>
+                <div className="text-left relative z-10 hidden sm:block">
+                  <div className="text-[10px] uppercase tracking-widest text-white/60 font-medium mb-[-2px]">Download on the</div>
+                  <div className="text-[20px] font-medium tracking-tight mt-0.5">App Store</div>
+                </div>
+                <div className="text-left relative z-10 sm:hidden">
+                  <div className="text-[18px] font-medium tracking-tight">App Store</div>
                 </div>
               </button>
-              <button className="bg-white/80 backdrop-blur-md border border-slate-200 text-slate-900 px-8 py-4 rounded-2xl flex items-center justify-center gap-3 hover:bg-white transition-all hover:-translate-y-1 shadow-xl">
-                <div className="text-left">
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">GET IT ON</div>
-                  <div className="text-xl font-semibold leading-none mt-0.5">Google Play</div>
+
+              {/* Pro Google Play Button */}
+              <button className="relative flex items-center justify-center gap-4 bg-white/95 backdrop-blur-xl text-slate-900 px-8 py-3.5 rounded-[1.25rem] hover:bg-white hover:shadow-[0_15px_40px_rgba(0,0,0,0.1)] hover:-translate-y-1 transition-all duration-300 border border-black/5 w-full sm:w-auto group overflow-hidden ring-1 ring-slate-900/5">
+                <div className="absolute inset-0 bg-gradient-to-tr from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <svg viewBox="0 0 512 512" className="w-[26px] h-[26px] fill-current text-slate-900"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z" /></svg>
+                <div className="text-left relative z-10 hidden sm:block">
+                  <div className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-[-2px]">GET IT ON</div>
+                  <div className="text-[20px] font-medium tracking-tight mt-0.5">Google Play</div>
+                </div>
+                <div className="text-left relative z-10 sm:hidden">
+                  <div className="text-[18px] font-medium tracking-tight">Google Play</div>
                 </div>
               </button>
             </motion.div>
@@ -172,14 +184,33 @@ function App() {
         {/* 4. PERFECTLY ALIGNED TIMELINE JOURNEY */}
         <section id="journey" className="relative w-full max-w-7xl mx-auto px-4 md:px-0 py-24 mb-12 z-10">
 
-          {/* The Central Vertical Axis (Background Dashed Line) */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px border-l-[3px] border-dashed border-[#D4AF37]/30 md:-translate-x-1/2 -z-10"></div>
+          {/* Timeline Origin Anchor (The Source) */}
+          {/* <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={isLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+            transition={{ duration: 0.8, delay: 2.0, type: "spring" }}
+            className="absolute left-[13.5px] md:left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-4 h-4"
+          >
+            <div className="absolute inset-[-4px] rounded-full border border-[#D4AF37] animate-ping opacity-75"></div>
+            <div className="w-3 h-3 bg-[#D4AF37] rounded-full shadow-[0_0_15px_rgba(212,175,55,0.8)] relative z-10"></div>
+          </motion.div> */}
 
-          {/* The Central Vertical Axis (Animated Solid Line) */}
+          {/* Timeline Lines Container with Top-Fade Mask */}
           <motion.div
-            className="absolute left-[15px] md:left-1/2 top-0 w-[4px] bg-gradient-to-b from-[#D4AF37] to-[#e6b981] md:-translate-x-1/2 origin-top rounded-full -z-10 shadow-[0_0_15px_rgba(212,175,55,0.6)]"
-            style={{ scaleY: smoothProgress, height: '100%' }}
-          />
+            initial={{ opacity: 0 }}
+            animate={isLoaded ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 1.5, delay: 2.2 }}
+            className="absolute inset-0 pointer-events-none [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%)] md:[mask-image:linear-gradient(to_bottom,transparent_0%,black_8%)]"
+          >
+            {/* The Central Vertical Axis (Background Dashed Line) */}
+            <div className="absolute left-[15px] md:left-1/2 top-0 bottom-0 w-px border-l-[3px] border-dashed border-[#D4AF37]/30 md:-translate-x-1/2 -z-10"></div>
+
+            {/* The Central Vertical Axis (Animated Solid Line) */}
+            <motion.div
+              className="absolute left-[15px] md:left-1/2 top-0 w-[4px] bg-gradient-to-b from-[#D4AF37] to-[#e6b981] md:-translate-x-1/2 origin-top rounded-full -z-10 shadow-[0_0_15px_rgba(212,175,55,0.6)]"
+              style={{ scaleY: smoothProgress, height: '100%' }}
+            />
+          </motion.div>
 
           {/* STOP 01: Beyond the Maze (Left side) */}
           <div className="relative flex flex-col md:flex-row w-full mb-32 md:mb-48 group">
@@ -215,7 +246,7 @@ function App() {
               className="w-full md:w-1/2 pl-16 md:pl-20 mt-12 md:mt-0"
             >
               <div className="relative w-full aspect-square rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/40 bg-white/50 backdrop-blur-[2px] p-2 hover:-translate-y-2 transition-transform duration-500">
-                <img src="https://images.unsplash.com/photo-1597212618440-8062628b4d3c?q=80&w=1000&auto=format&fit=crop" alt="Moroccan Medina Alleyway" className="w-full h-full object-cover rounded-[2rem]" />
+                <img src={RiadImg} alt="Moroccan Medina Alleyway" className="w-full h-full object-cover rounded-[2rem]" />
               </div>
             </motion.div>
           </div>
@@ -321,18 +352,7 @@ function App() {
                   <div className="absolute top-0 right-0 w-[150%] h-[150%] bg-gradient-to-tr from-transparent via-transparent to-white/10 origin-top-right -rotate-12 pointer-events-none z-40"></div>
 
                   {/* App Content */}
-                  <img src="https://images.unsplash.com/photo-1549488344-c6fef8adcb24?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10"></div>
-
-                  {/* UI Overlay */}
-                  <div className="absolute bottom-6 inset-x-4 z-20 flex flex-col gap-4">
-                    <div className="bg-white/95 backdrop-blur-xl p-4 rounded-3xl rounded-bl-sm shadow-xl border border-white/50">
-                      <p className="text-slate-800 text-sm font-medium leading-relaxed">Notice the intricate 14th-century Zellij tiles on this fountain. It took three master artisans a year to restore.</p>
-                    </div>
-                    <div className="bg-medina-green p-3 rounded-2xl rounded-br-sm ml-auto max-w-[80%] text-white shadow-lg border border-medina-green/50">
-                      <p className="text-sm shadow-sm">What does the star signify?</p>
-                    </div>
-                  </div>
+                  <img src={AppScreenshotImg} alt="toMedina App Screenshot" className="absolute inset-0 w-full h-full object-cover" />
 
                 </div>
               </div>
